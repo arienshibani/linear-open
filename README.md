@@ -1,4 +1,4 @@
-# linear-open 🧑‍💻
+# zsh-linear-open 🧑‍💻
 
 Type `linear open` to open the [Linear](https://linear.app/) issue associated with your current Git branch in your browser. 
 
