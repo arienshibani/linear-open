@@ -74,10 +74,6 @@ export LINEAR_OPEN_BASE_URL="https://linear.app/your-workspace/issue"
 
 — Inspired by [`git-open`](https://github.com/paulirish/git-open).
 
-https://github.com/user-attachments/assets/9a09b320-13ac-4ec9-b715-db56bcd9e3b6
-
-
-
 ## License
 
 Copyright linear-open contributors. Licensed under MIT.
