@@ -1,0 +1,9 @@
+# Ignore local/private notes and conversation transcripts
+private/
+
+# Editor / OS noise
+.DS_Store
+*.swp
+*~
+.idea/
+.vscode/
