@@ -2,8 +2,9 @@
 
 Type `linear open` to open the [Linear](https://linear.app/) issue associated with your current Git branch in your browser. 
 
-![Demo of linear open in action](https://github.com/user-attachments/assets/82124eb9-afc5-4249-bd12-05dd95d71f37)
-
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/82124eb9-afc5-4249-bd12-05dd95d71f37" width="480" alt="Demo of linear open in action">
+</p>
 
 ## Rationale
 
@@ -29,11 +30,28 @@ The following sections describe how to install the plugin for different plugin m
 
 ### Oh My Zsh (recommended)
 
+#### 1. Install the plugin
+
 ```sh
 git clone https://github.com/arienshibani/linear-open.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/linear-open
 ```
 
-Then add `linear-open` to `plugins=(...)` in `~/.zshrc` and restart your shell.
+#### 2. Add `linear-open` to `plugins=(...)` in `~/.zshrc`.
+
+```zsh
+plugins=(
+  git
+  linear-open
+)
+```
+
+#### 3. Restart your shell to load the plugin.
+
+```sh
+source ~/.zshrc
+```
+
+---
 
 ### [Antigen](https://github.com/zsh-users/antigen)
 
