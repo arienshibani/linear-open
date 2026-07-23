@@ -1,102 +1,65 @@
-# zsh-linear-open
+# linear-open 🧑‍💻
 
-This plugin for Zsh adds a `linear` command that when executed, will check the current branch name you are on for a **Linear issue key**. If found, it will open your browser to the corresponding Linear issue, directly in your browser. Similar to the `git open` command.
+Type `linear open` to open the [Linear](https://linear.app/) issue associated with your current Git branch in your browser. 
 
-## Requirements
+![Demo of linear open in action](https://github.com/user-attachments/assets/82124eb9-afc5-4249-bd12-05dd95d71f37)
 
-- [Zsh](https://www.zsh.org/) (Tested to work on v5.0 or higher)
-- [Git](https://git-scm.com/)
-- A browser opener available on your OS (`open`, `xdg-open`, or `powershell.exe`)
 
----
+## Rationale
+
+A lot of Linear users have GitHub integration enabled and use the _Copy git branch name_ action (`Cmd/Ctrl+Shift+.` or `Ctrl+Shift+.`) to copy the git branch name when starting to work on an issue. If you are following the intended convention   of prefixing the branch name with the issue key, this plugin allows you to open the issue directly in your browser by typing `linear open`. The plugin also supports customized base URL's for opening the issue.
+
+## Usage
+
+```sh
+linear open
+Opening REM-471 → https://linear.app/issue/REM-471
+```
+
+The current branch name is scanned for a Linear issue key (e.g. `PRO-125`, `ENG-42`). All of the formats from Linear's "Copy branch name" work:
+
+- `username/proj-123-feature-description`
+- `PROJ-123-feature-description`
+- `proj-123`
+- `feature/HOW-42`
 
 ## Installation
 
+The following sections describe how to install the plugin for different plugin managers.
+
 ### Oh My Zsh (recommended)
 
-Clone into your Oh My Zsh custom plugins directory:
-
-```bash
-git clone https://github.com/arienshibani/linear-open.git \
-  ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/linear-open
+```sh
+git clone https://github.com/arienshibani/linear-open.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/linear-open
 ```
 
-Enable the plugin in `~/.zshrc`:
+Then add `linear-open` to `plugins=(...)` in `~/.zshrc` and restart your shell.
 
-```zsh
-plugins=(... linear-open)
-```
+### [Antigen](https://github.com/zsh-users/antigen)
 
-Reload your shell:
+Add `antigen bundle arienshibani/linear-open` to your `.zshrc` with your other bundle commands.
 
-```bash
-source ~/.zshrc
-```
+Antigen will handle cloning the plugin for you automatically the next time you start zsh. You can also add the plugin to a running zsh with `antigen bundle arienshibani/linear-open` for testing before adding it to your `.zshrc`.
 
-### Zplug
+### [zplug](https://github.com/zplug/zplug)
 
 ```zsh
 zplug "arienshibani/linear-open"
 ```
 
-Then:
+Then `zplug install` and `zplug load`.
 
-```bash
-zplug install
-zplug load
-```
+### [zgenom](https://github.com/jandamm/zgenom)
 
-### zgenom
+Add `zgenom load arienshibani/linear-open` to your `.zshrc` where your other `zgenom load` calls are. Run `zgenom reset` (or regenerate) and restart the shell so the plugin is picked up.
 
-```zsh
-zgenom load arienshibani/linear-open
-```
+## Requirements
 
-Run `zgenom reset` (or regenerate) and restart the shell so the plugin is picked up.
+- [Zsh](https://www.zsh.org/) (tested on v5.0+)
+- [Git](https://git-scm.com/)
+- A browser opener (`open`, `xdg-open`, or `powershell.exe` / `cmd.exe`)
 
-### Antigen
-
-```zsh
-antigen bundle arienshibani/linear-open
-antigen apply
-```
-
-### Manual (no plugin manager)
-
-```bash
-git clone https://github.com/arienshibani/linear-open.git ~/src/linear-open
-```
-
-Add to `~/.zshrc`:
-
-```zsh
-source ~/src/linear-open/linear-open.plugin.zsh
-```
-
----
-
-## Usage
-
-From any Git repository whose current branch contains a Linear issue key:
-
-```bash
-linear          # default: open
-linear open     # explicit
-linopen         # short alias for `linear open`
-linear help     # usage text
-```
-
-Example:
-
-```text
-$ git branch --show-current
-ari/how-125-add-oauth
-
-$ linear open
-Opening HOW-125 → https://linear.app/issue/HOW-125
-```
-
-### Configuration
+## Configuration
 
 Optional environment variable (set in `~/.zshrc`):
 
@@ -107,59 +70,15 @@ Optional environment variable (set in `~/.zshrc`):
 export LINEAR_OPEN_BASE_URL="https://linear.app/your-workspace/issue"
 ```
 
----
+## Inspired by
 
-## Git alias alternative (`git linear`)
+— Inspired by [`git-open`](https://github.com/paulirish/git-open).
 
-If you prefer not to use Oh My Zsh, you can install a Git alias that shells out to the same logic.
+https://github.com/user-attachments/assets/9a09b320-13ac-4ec9-b715-db56bcd9e3b6
 
-### Option A - alias pointing at this plugin
 
-After cloning the repo somewhere permanent (e.g. `~/src/linear-open`):
-
-```bash
-git config --global alias.linear '!zsh -c '\''
-  source ~/src/linear-open/linear-open.plugin.zsh
-  linear open
-'\'''
-```
-
-Then:
-
-```bash
-git linear
-```
-
-### Option B - self-contained one-liner alias
-
-No plugin install required:
-
-```bash
-git config --global alias.linear '!f() {
-  branch=$(git rev-parse --abbrev-ref HEAD) || exit 1
-  if [ "$branch" = "HEAD" ]; then echo "git linear: detached HEAD"; exit 1; fi
-  key=$(printf "%s" "$branch" | grep -oE "[A-Za-z][A-Za-z0-9]*-[0-9]+" | head -1 | tr "[:lower:]" "[:upper:]")
-  if [ -z "$key" ]; then echo "git linear: no Linear issue key in branch '\''$branch'\''"; exit 1; fi
-  url="https://linear.app/issue/$key"
-  echo "Opening $key → $url"
-  if command -v open >/dev/null 2>&1; then open "$url"
-  elif command -v xdg-open >/dev/null 2>&1; then xdg-open "$url"
-  elif command -v powershell.exe >/dev/null 2>&1; then powershell.exe -NoProfile -Command "Start-Process '\''$url'\''"
-  else echo "git linear: open manually: $url"; exit 1; fi
-}; f'
-```
-
----
-
-## How it works
-
-1. Confirm the cwd is inside a Git work tree (`git rev-parse --is-inside-work-tree`)
-2. Read the current branch (`git rev-parse --abbrev-ref HEAD`)
-3. Match a Linear-style key with Zsh regex: letters + `-` + digits (e.g. `HOW-125`)
-4. Uppercase the key and open `${LINEAR_OPEN_BASE_URL}/${KEY}` in the default browser
-
----
 
 ## License
 
-[MIT](./LICENSE)
+Copyright linear-open contributors. Licensed under MIT.
+<http://opensource.org/licenses/MIT>
