@@ -1,8 +1,11 @@
 # linear-open 🧑‍💻
 
-Type `linear open` to open the [Linear](https://linear.app/) issue associated with your current Git branch in your browser. Inspired by [`git-open`](https://github.com/paulirish/git-open).
+Type `linear open` to open the [Linear](https://linear.app/) issue associated with your current Git branch in your browser. 
 
-## How it works
+![Demo of linear open in action](https://github.com/user-attachments/assets/82124eb9-afc5-4249-bd12-05dd95d71f37)
+
+
+## Rationale
 
 A lot of Linear users have GitHub integration enabled and use the _Copy git branch name_ action (`Cmd/Ctrl+Shift+.` or `Ctrl+Shift+.`) to copy the git branch name when starting to work on an issue. If you are following the intended convention   of prefixing the branch name with the issue key, this plugin allows you to open the issue directly in your browser by typing `linear open`. The plugin also supports customized base URL's for opening the issue.
 
@@ -69,7 +72,11 @@ export LINEAR_OPEN_BASE_URL="https://linear.app/your-workspace/issue"
 
 ## Inspired by
 
-— Type `git open` to open the repo website (GitHub, GitLab, Bitbucket)
+— Inspired by [`git-open`](https://github.com/paulirish/git-open).
+
+https://github.com/user-attachments/assets/9a09b320-13ac-4ec9-b715-db56bcd9e3b6
+
+
 
 ## License
 
